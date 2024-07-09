@@ -10,16 +10,16 @@ int main(){
     int size=x*y;
     // ! x -->
     // ! y  V
-    int sheet[y][x][3]={0};
+    int sheet[y][x][4]={0};
     int temprary[size]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                        0,0,1,0,1,1,0,0,1,1,0,1,1,0,0,
-                        0,0,1,1,1,0,0,0,0,1,0,1,1,5,0,
-                        0,0,0,1,0,1,0,1,0,1,0,0,1,0,0,
-                        0,1,1,1,0,1,1,1,0,1,1,0,1,0,0,
+                        0,0,1,0,1,1,0,0,1,1,0,1,1,1,0,
+                        0,0,1,1,1,0,0,0,0,1,1,1,0,5,0,
+                        0,0,0,1,0,1,0,1,0,1,0,0,1,1,0,
+                        0,1,1,1,0,1,1,1,1,1,1,0,1,0,0,
                         0,0,0,1,1,1,0,1,0,0,1,0,1,1,0,
                         0,1,0,1,0,0,0,1,1,1,1,1,0,1,0,
                         0,1,1,1,1,1,0,1,0,1,0,1,0,1,0,
-                        0,0,0,1,0,1,0,0,0,1,0,1,1,1,0,
+                        0,0,0,1,0,1,0,0,0,1,0,1,0,1,0,
                         0,3,1,1,0,0,0,1,1,1,0,1,0,1,0,
                         0,1,0,1,1,1,0,1,0,1,0,1,1,1,0,
                         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
@@ -114,14 +114,24 @@ int main(){
     }
     */
 
+   for(int i=0;i<y;i++){
+        for(int j=0;j<x;j++){
+            sheet[i][j][3]=0;
+        }
+    }
+
    // ! setup      
    int current_num=1;
    for(int i=0;i<y;i++){
         for(int j=0;j<x;j++){
             if(sheet[i][j][0]==3){
                 sheet[i][j][1]=1;
+                sheet[i][j][3]=1;
             }else{
                 sheet[i][j][1]=0;
+            }
+            if(sheet[i][j][0]==5){
+                sheet[i][j][3]=1;
             }
         }
     }
@@ -201,6 +211,86 @@ int main(){
         cout<<endl;
     }
     cout<<"Number of Steps: "<<size-steps<<endl;
+    for(int i=0;i<y;i++){
+        for(int j=0;j<x;j++){
+            cout<<sheet[i][j][1]<<" ";
+        }
+        cout<<endl;
+    }
     // cout<<sheet[2][10][0]<<endl;
     // cout<<sheet[10][2][0]<<endl;
+    int run=size-steps;
+
+    int finalx;
+    int finaly;
+    for(int i=0;i<y;i++){
+        for(int j=0;j<x;j++){
+            if(sheet[i][j][0]==5){
+                finalx=j;
+                finaly=i;
+                break;
+            }
+        }
+    }
+    run++;
+    currentx=finalx;
+    currenty=finaly;
+    int back[run][2];
+    back[0][0]=currentx;
+    back[0][1]=currenty;
+    int count=1;
+    cout<<run<<endl;
+    for(int i=0;i<(size-steps-1);i++){
+        if(sheet[currenty+1][currentx][1]==run-1){
+            currenty=currenty+1;
+            currentx=currentx;
+            sheet[currenty][currentx][3]++;
+            run--;
+            back[count][0]=currentx;
+            back[count][1]=currenty;
+            count++;
+            cout<<"down ";
+        }else if(sheet[currenty-1][currentx][1]==run-1){
+            currenty=currenty-1;
+            currentx=currentx;
+            sheet[currenty][currentx][3]++;
+            run--;
+            back[count][0]=currentx;
+            back[count][1]=currenty;
+            count++;
+            cout<<"up ";
+        }else if(sheet[currenty][currentx+1][1]==run-1){
+            currenty=currenty;
+            currentx=currentx+1;
+            sheet[currenty][currentx][3]++;
+            run--;
+            back[count][0]=currentx;
+            back[count][1]=currenty;
+            count++;
+            cout<<"right ";
+        }else if(sheet[currenty][currentx-1][1]==run-1){
+            currenty=currenty;
+            currentx=currentx-1;
+            sheet[currenty][currentx][3]++;
+            run--;
+            back[count][0]=currentx;
+            back[count][1]=currenty;
+            count++;
+            cout<<"left ";
+        }
+    }
+    cout<<endl;
+    for(int i=0;i<size-steps;i++){
+        cout<<back[i][0]<<" "<<back[i][1]<<endl;
+    }
+    for(int i=0;i<y;i++){
+        for(int j=0;j<x;j++){
+            if(sheet[i][j][3]!=0){
+                cout<<"  ";
+            }else{
+                cout<<"▇ ";
+            }
+        }
+        cout<<endl;
+    }
 }
