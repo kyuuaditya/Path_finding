@@ -35,8 +35,8 @@ int main(){
             }
         }
     }
-    sheet[19+1][0+1][0]=3;
-    sheet[0+1][19+1][0]=5;
+    sheet[w][0+1][0]=3;
+    sheet[0+1][h][0]=5;
 
     for(int i=0;i<x;i++){
         sheet[0][i][0]=0;
@@ -47,20 +47,20 @@ int main(){
         sheet[i][x-1][0]=0;
     }
 
-    for(int i=0;i<y;i++){
-        for(int j=0;j<x;j++){
-            cout<<sheet[i][j][0]<<" ";
-        }
-        cout<<endl;
-    }
+    // for(int i=0;i<y;i++){
+    //     for(int j=0;j<x;j++){
+    //         cout<<sheet[i][j][0]<<" ";
+    //     }
+    //     cout<<endl;
+    // }
 
     int canvasx=200;
     int canvasy=200;
     CImg<unsigned char> result(canvasx,canvasy,1,3);
     CImgDisplay pic(result,"result screen");
     
-    int x5=220;
-    int y5=220;
+    int x5=10*x;
+    int y5=10*y;
     CImg<unsigned char> vis(x5,y5,1,3);
     CImgDisplay draw_disp(vis,"Intensity profile");
     vis.fill(0);
@@ -260,19 +260,19 @@ int main(){
     }
    
    // *displaying the array.
-    for(int i=0;i<y;i++){
-        for(int j=0;j<x;j++){
-            cout<<sheet[i][j][0]<<" ";
-        }
-        cout<<endl;
-    }
+    // for(int i=0;i<y;i++){
+    //     for(int j=0;j<x;j++){
+    //         cout<<sheet[i][j][0]<<" ";
+    //     }
+    //     cout<<endl;
+    // }
     cout<<"Number of Steps: "<<size-steps<<endl;
-    for(int i=0;i<y;i++){
-        for(int j=0;j<x;j++){
-            cout<<sheet[i][j][1]<<" ";
-        }
-        cout<<endl;
-    }
+    // for(int i=0;i<y;i++){
+    //     for(int j=0;j<x;j++){
+    //         cout<<sheet[i][j][1]<<" ";
+    //     }
+    //     cout<<endl;
+    // }
     // cout<<sheet[2][10][0]<<endl;
     // cout<<sheet[10][2][0]<<endl;
     int run=size-steps;
@@ -295,7 +295,7 @@ int main(){
     back[0][0]=currentx;
     back[0][1]=currenty;
     int count=1;
-    cout<<run<<endl;
+    // cout<<run<<endl;
     for(int i=0;i<(size-steps-1);i++){
         if(sheet[currenty+1][currentx][1]==run-1){
             currenty=currenty+1;
@@ -334,11 +334,12 @@ int main(){
             count++;
             cout<<"left ";
         }
+        cout<<endl;
     }
-    cout<<endl;
-    for(int i=0;i<size-steps;i++){
-        cout<<back[i][0]<<" "<<back[i][1]<<endl;
-    }
+    // cout<<endl;
+    // for(int i=0;i<size-steps;i++){
+    //     cout<<back[i][0]<<" "<<back[i][1]<<endl;
+    // }
 
     int p=0;
     int q=0;
