@@ -11,3 +11,6 @@ If want to solve a custom mazes:
 5. run "main.exe" to get the result.
 
 Note: the maze must be a solvable one or else you might get a blank screen or garbage result.
+Note: By default start point and end point are bottom left corner and top right corner.
+Note: when making a custom image, path is be white while blocked place should be colored black.
+Note: only use black and white color for better image readability.

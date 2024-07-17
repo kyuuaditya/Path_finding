@@ -1,31 +1,30 @@
+// * 2d maze solver by Djikstra Algorighm for non weighted maze.
+// * Author: Aditya
+
+//adding necessary libraries
 #include <stdio.h>
 #include <bits/stdc++.h>
 #include"CImg.h"
 using namespace std;
 using namespace cimg_library;
 
-// letting the array size be a varible as feed by the input
 int main(){
-    
-    //manually inputing the grid
-    // int x=15;
-    // int y=12;
-    // int size=x*y;
-    // ! x -->
-    // ! y  V
-    // int sheet[y][x][4]={0};
+    // taking the images as input.
     CImg<unsigned char> img("maze.jpg");
     CImg<unsigned int> *image=new CImg<unsigned int>("maze.jpg");
 
+    // getting dimentions. 
     int w=(*image).width();
     int h=(*image).height();
     cout<<"Dimentions: "<<w<<" "<<h<<" "<<endl;
 
+    // initializing variables and array.
     int x=w+2;
     int y=h+2;
     int sheet[x][y][4]={0};
     int size=x*y;
 
+    // reading and saving maze data from image.
     for(int i=1;i<x;i++){
         for(int j=1;j<y;j++){
             if(img.atXY(j-1,i-1)>120){
@@ -35,9 +34,12 @@ int main(){
             }
         }
     }
+
+    // setting starting and end points.
     sheet[w][0+1][0]=3;
     sheet[0+1][h][0]=5;
 
+    // adding a 1 length wide block to reduce computation cost.
     for(int i=0;i<x;i++){
         sheet[0][i][0]=0;
         sheet[y-1][i][0]=0;
@@ -47,138 +49,28 @@ int main(){
         sheet[i][x-1][0]=0;
     }
 
-    // for(int i=0;i<y;i++){
-    //     for(int j=0;j<x;j++){
-    //         cout<<sheet[i][j][0]<<" ";
-    //     }
-    //     cout<<endl;
-    // }
-
-    int canvasx=200;
-    int canvasy=200;
-    CImg<unsigned char> result(canvasx,canvasy,1,3);
-    CImgDisplay pic(result,"result screen");
-    
+    // result display 
     int x5=10*x;
     int y5=10*y;
     CImg<unsigned char> vis(x5,y5,1,3);
-    CImgDisplay draw_disp(vis,"Intensity profile");
+    CImgDisplay draw_disp(vis,"shrotest path");
     vis.fill(0);
 
-    /*
-    int temprary[size]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                        0,0,1,0,1,1,0,0,1,1,0,1,1,1,0,
-                        0,0,1,1,1,0,0,0,0,1,1,1,0,5,0,
-                        0,0,0,1,0,1,0,1,0,1,0,0,1,1,0,
-                        0,1,1,1,0,1,1,1,1,1,1,0,1,0,0,
-                        0,0,0,1,1,1,0,1,0,0,1,0,1,1,0,
-                        0,1,0,1,0,0,0,1,1,1,1,1,0,1,0,
-                        0,1,1,1,1,1,0,1,0,1,0,1,0,1,0,
-                        0,0,0,1,0,1,0,0,0,1,0,1,0,1,0,
-                        0,3,1,1,0,0,0,1,1,1,0,1,0,1,0,
-                        0,1,0,1,1,1,0,1,0,1,0,1,1,1,0,
-                        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    // second display
+    CImg<unsigned char> maze(x5,y5,1,3);
+    CImgDisplay draw_disp2(maze,"shrotest path");
+    maze.fill(0);
 
-    int num=0;
+    // setting every block as not-visited.
     for(int i=0;i<y;i++){
-        for(int j=0;j<x;j++){
-            num=x*i+j;
-            int tem=temprary[num];
-            sheet[i][j][0]=temprary[num];
-            // cout<<sheet[i][j][0];
-            // cout<<endl;
-        }
-    }
-    */
-
-    // for(int i=0;i<y;i++){
-    //     for(int j=0;j<x;j++){
-    //         if(sheet[i][j][0]==5){
-    //             cout<<"its here: "<<i<<" "<<j<<endl;
-    //         }
-    //     }
-    // }
-
-    // for(int i=0;i<y;i++){
-    //     for(int j=0;j<x;j++){
-    //         cout<<sheet[i][j][0]<<" ";
-    //     }
-    //     cout<<endl;
-    // }
-
-    // cout<<endl;
-    // cout<<sheet[2][13][0]<<endl;
-    // cout<<sheet[13][2][0]<<endl;
-    // cout<<endl;  
-
-    // cout<<"type of values of grids one by one as 0 or 1"<<endl;
-    // // * taking input values
-    // for(int i=1;i<=10;i++){
-    //     for(int j=1;j<=10;j++){
-    //         cin>>sheet[i][j][0];
-    //     }
-    // }
-    /*
-    * this code for manual input after running the program 
-    // * inputing the block, path, start, end or void as a porperty.
-    int inputs=x*y;
-    int tempx=1;
-    int tempy=1;
-    while(inputs){
-        int temp;
-        cin>>temp;
-        if(temp==0){
-            sheet[tempx][tempy][0]=0;
-            tempy++;
-            inputs--;
-        }else if(temp==1){
-            sheet[tempx][tempy][0]=1;
-            tempy++;
-            inputs--;
-        }else if(temp==2){
-            sheet[tempx][tempy][0]=2;
-            tempy++;
-            inputs--;
-        }else if(temp==3){
-            sheet[tempx][tempy][0]=3;
-            tempy++;
-            inputs--;
-        }else if(temp==5){
-            sheet[tempx][tempy][0]=5;
-            tempy++;
-            inputs--;
-        }else {
-            cout<<"enter a valid input below \n";
-        }
-        if(tempy==y+1){
-            tempx++;
-            tempy=1;
-        }
-    }
-    for(int i=0;i<x+1;i++){
-        sheet[i][0][0]=0;
-    }
-    
-    for(int i=0;i<y+1;i++){
-        sheet[0][i][0]=0;
-    }
-    
-    for(int i=0;i<x+2;i++){
-        cout<<sheet[i][0][0]<<" "<<sheet[i][1][0]<<" "<<
-        sheet[i][2][0]<<" "<<sheet[i][3][0]<<" "<<sheet[i][4][0]<<" ";
-        cout<<endl;
-    }
-    */
-
-   for(int i=0;i<y;i++){
         for(int j=0;j<x;j++){
             sheet[i][j][3]=0;
         }
     }
 
-   // ! setup      
-   int current_num=1;
-   for(int i=0;i<y;i++){
+    // reading start and end point and setup.     
+    int current_num=1;
+    for(int i=0;i<y;i++){
         for(int j=0;j<x;j++){
             if(sheet[i][j][0]==3){
                 sheet[i][j][1]=1;
@@ -191,9 +83,8 @@ int main(){
             }
         }
     }
-
     
-    // * traversal
+    // traversing the data to solve the algorithm.
     int currenty=0;
     int currentx=0; 
     int steps =size; 
@@ -245,38 +136,18 @@ int main(){
                             break;
                         }
                     }
-                    // for(int i=0;i<y;i++){
-                    //     for(int j=0;j<x;j++){
-                    //         cout<<sheet[i][j][1]<<" ";
-                    //     }
-                    //     cout<<endl;
-                    // }
                 }
             }
         }
         current_num++;
         steps--;
-        // cout<<size-steps<<endl;
     }
-   
-   // *displaying the array.
-    // for(int i=0;i<y;i++){
-    //     for(int j=0;j<x;j++){
-    //         cout<<sheet[i][j][0]<<" ";
-    //     }
-    //     cout<<endl;
-    // }
+
+    // display number of steps.
     cout<<"Number of Steps: "<<size-steps<<endl;
-    // for(int i=0;i<y;i++){
-    //     for(int j=0;j<x;j++){
-    //         cout<<sheet[i][j][1]<<" ";
-    //     }
-    //     cout<<endl;
-    // }
-    // cout<<sheet[2][10][0]<<endl;
-    // cout<<sheet[10][2][0]<<endl;
     int run=size-steps;
 
+    // starting a reverse traversal form end point to start point. 
     int finalx;
     int finaly;
     for(int i=0;i<y;i++){
@@ -295,7 +166,8 @@ int main(){
     back[0][0]=currentx;
     back[0][1]=currenty;
     int count=1;
-    // cout<<run<<endl;
+
+    // reverse traversal.
     for(int i=0;i<(size-steps-1);i++){
         if(sheet[currenty+1][currentx][1]==run-1){
             currenty=currenty+1;
@@ -334,16 +206,12 @@ int main(){
             count++;
             cout<<"left ";
         }
-        cout<<endl;
     }
-    // cout<<endl;
-    // for(int i=0;i<size-steps;i++){
-    //     cout<<back[i][0]<<" "<<back[i][1]<<endl;
-    // }
-
+        cout<<endl;
+    
+    // constructing the result screens.
     int p=0;
     int q=0;
-    result.fill(10);
     for(int i=0;i<y;i++){
         for(int j=0;j<x;j++){
             if(sheet[i][j][3]!=0){
@@ -369,16 +237,42 @@ int main(){
         cout<<endl;
     }
 
-    // CImg<unsigned int> *res=new CImg <unsigned int>result;
-    
-    // while(!pic.is_closed()){
-    //     result.display(pic);
-    // }
-
-    
-    while (!draw_disp.is_closed()) {
-        // draw_disp.wait();
-        vis.display(draw_disp);
+    p=0;
+    q=0;
+    for(int i=0;i<y;i++){
+        for(int j=0;j<x;j++){
+            if(sheet[i][j][0]==0){        
+                for(int p=0;p<9;p++){
+                    for(int q=0;q<9;q++){
+                        maze(10*j+p,10*i+q,0,0)=0;
+                        maze(10*j+p,10*i+q,0,1)=0;
+                        maze(10*j+p,10*i+q,0,2)=0;
+                    }
+                }
+            }else{
+                for(int p=0;p<9;p++){
+                    for(int q=0;q<9;q++){
+                        maze(10*j+p,10*i+q,0,0)=255;
+                        maze(10*j+p,10*i+q,0,1)=255;
+                        maze(10*j+p,10*i+q,0,2)=255;
+                    }
+                }
+            }
+            if(sheet[i][j][3]!=0){
+                for(int p=0;p<9;p++){
+                    for(int q=0;q<9;q++){
+                        maze(10*j+p,10*i+q,0,0)=250;
+                        maze(10*j+p,10*i+q,0,1)=140;
+                        maze(10*j+p,10*i+q,0,2)=0;
+                    }
+                }
+            }
+        }
     }
 
+    // displaying the result screen.
+    while (!draw_disp.is_closed()&&!draw_disp2.is_closed()) {
+        vis.display(draw_disp);
+        maze.display(draw_disp2);
+    }
 }
