@@ -1,16 +1,71 @@
 #include <stdio.h>
 #include <bits/stdc++.h>
+#include"CImg.h"
 using namespace std;
+using namespace cimg_library;
 
 // letting the array size be a varible as feed by the input
 int main(){
+    
     //manually inputing the grid
-    int x=15;
-    int y=12;
-    int size=x*y;
+    // int x=15;
+    // int y=12;
+    // int size=x*y;
     // ! x -->
     // ! y  V
-    int sheet[y][x][4]={0};
+    // int sheet[y][x][4]={0};
+    CImg<unsigned char> img("maze.jpg");
+    CImg<unsigned int> *image=new CImg<unsigned int>("maze.jpg");
+
+    int w=(*image).width();
+    int h=(*image).height();
+    cout<<"Dimentions: "<<w<<" "<<h<<" "<<endl;
+
+    int x=w+2;
+    int y=h+2;
+    int sheet[x][y][4]={0};
+    int size=x*y;
+
+    for(int i=1;i<x;i++){
+        for(int j=1;j<y;j++){
+            if(img.atXY(j-1,i-1)>120){
+                sheet[i][j][0]=1;
+            }else{
+                sheet[i][j][0]=0;
+            }
+        }
+    }
+    sheet[19+1][0+1][0]=3;
+    sheet[0+1][19+1][0]=5;
+
+    for(int i=0;i<x;i++){
+        sheet[0][i][0]=0;
+        sheet[y-1][i][0]=0;
+    }
+    for(int i=0;i<y;i++){
+        sheet[i][0][0]=0;
+        sheet[i][x-1][0]=0;
+    }
+
+    for(int i=0;i<y;i++){
+        for(int j=0;j<x;j++){
+            cout<<sheet[i][j][0]<<" ";
+        }
+        cout<<endl;
+    }
+
+    int canvasx=200;
+    int canvasy=200;
+    CImg<unsigned char> result(canvasx,canvasy,1,3);
+    CImgDisplay pic(result,"result screen");
+    
+    int x5=220;
+    int y5=220;
+    CImg<unsigned char> vis(x5,y5,1,3);
+    CImgDisplay draw_disp(vis,"Intensity profile");
+    vis.fill(0);
+
+    /*
     int temprary[size]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
                         0,0,1,0,1,1,0,0,1,1,0,1,1,1,0,
                         0,0,1,1,1,0,0,0,0,1,1,1,0,5,0,
@@ -34,6 +89,7 @@ int main(){
             // cout<<endl;
         }
     }
+    */
 
     // for(int i=0;i<y;i++){
     //     for(int j=0;j<x;j++){
@@ -283,14 +339,45 @@ int main(){
     for(int i=0;i<size-steps;i++){
         cout<<back[i][0]<<" "<<back[i][1]<<endl;
     }
+
+    int p=0;
+    int q=0;
+    result.fill(10);
     for(int i=0;i<y;i++){
         for(int j=0;j<x;j++){
             if(sheet[i][j][3]!=0){
+                for(int p=0;p<9;p++){
+                    for(int q=0;q<9;q++){
+                        vis(10*j+p,10*i+q,0,0)=255;
+                        vis(10*j+p,10*i+q,0,1)=255;
+                        vis(10*j+p,10*i+q,0,2)=255;
+                    }
+                }
                 cout<<"  ";
             }else{
-                cout<<"▇ ";
+                for(int p=0;p<9;p++){
+                    for(int q=0;q<9;q++){
+                        vis(10*j+p,10*i+q,0,0)=100;
+                        vis(10*j+p,10*i+q,0,1)=100;
+                        vis(10*j+p,10*i+q,0,2)=100;
+                    }
+                }
+                cout<<"█ ";
             }
         }
         cout<<endl;
     }
+
+    // CImg<unsigned int> *res=new CImg <unsigned int>result;
+    
+    // while(!pic.is_closed()){
+    //     result.display(pic);
+    // }
+
+    
+    while (!draw_disp.is_closed()) {
+        // draw_disp.wait();
+        vis.display(draw_disp);
+    }
+
 }
