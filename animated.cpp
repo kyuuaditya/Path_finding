@@ -3,12 +3,6 @@
 #include <vector>
 
 int main() {
-    sf::ContextSettings settings;
-    settings.antialiasingLevel = 8;
-    sf::RenderWindow window(sf::VideoMode(1280, 720), "Main menu", sf::Style::Default, settings);
-    window.setFramerateLimit(144); // set frame rate limit
-    window.setVerticalSyncEnabled(true); // enable vertical sync
-
     sf::Image image;
     if (!image.loadFromFile("maze_ani.png")) {
         std::cerr << "Failed to load image" << std::endl;
@@ -121,22 +115,19 @@ int main() {
     int back_y = location_y;
     int back_count = imageData[location_x][location_y][2];
     while (back_count > 0) {
-        if (imageData[back_x + 1][back_y][2] == back_count - 1) {
-            back_x = back_x + 1;
-            imageData[back_x + 1][back_y][3] = 1;
-        }
-        else if (imageData[back_x - 1][back_y][2] == back_count - 1) {
+        if (imageData[back_x - 1][back_y][2] == back_count - 1) {
             back_x = back_x - 1;
-            imageData[back_x - 1][back_y][3] = 1;
+        }
+        else if (imageData[back_x + 1][back_y][2] == back_count - 1) {
+            back_x = back_x + 1;
         }
         else if (imageData[back_x][back_y + 1][2] == back_count - 1) {
             back_y = back_y + 1;
-            imageData[back_x][back_y + 1][3] = 1;
         }
         else if (imageData[back_x][back_y - 1][2] == back_count - 1) {
             back_y = back_y - 1;
-            imageData[back_x][back_y - 1][3] = 1;
         }
+        imageData[back_x][back_y][3] = 1;
         back_count--;
         std::cout << back_x - 1 << " " << back_y - 1 << std::endl;
     }
@@ -160,8 +151,29 @@ int main() {
                 window.close();
         }
 
-
         window.clear();
+        for (unsigned int y = 0; y < size.y + 0; y++) {
+            for (unsigned int x = 0; x < size.x + 0; x++) {
+                if (imageData[x + 1][y + 1][0] == 0) {
+                    sf::RectangleShape rectangle(sf::Vector2f(cell_size - 2, cell_size - 2));
+                    rectangle.setFillColor(sf::Color::Black);
+                    rectangle.setPosition(x * cell_size + 1, y * cell_size + 1);
+                    window.draw(rectangle);
+                }
+                else {
+                    sf::RectangleShape rectangle(sf::Vector2f(cell_size - 2, cell_size - 2));
+                    rectangle.setFillColor(sf::Color::White);
+                    rectangle.setPosition(x * cell_size + 1, y * cell_size + 1);
+                    window.draw(rectangle);
+                }
+                if (imageData[x + 1][y + 1][3] == 1) {
+                    sf::RectangleShape rectangle(sf::Vector2f(cell_size - 2, cell_size - 2));
+                    rectangle.setFillColor(sf::Color::Magenta);
+                    rectangle.setPosition(x * cell_size + 1, y * cell_size + 1);
+                    window.draw(rectangle);
+                }
+            }
+        }
         // Draw your stuff here
         window.display();
     }
