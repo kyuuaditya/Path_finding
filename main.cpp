@@ -5,14 +5,14 @@
 #include <bits/stdc++.h>
 #include <stdio.h>
 
-#include "CImg.h"
+#include "C:\mingw64\include\CImg.h"
 using namespace std;
 using namespace cimg_library;
 
 int main() {
     // taking the images as input.
     CImg<unsigned char> img("maze.jpg");
-    CImg<unsigned int> *image = new CImg<unsigned int>("maze.jpg");
+    CImg<unsigned int>* image = new CImg<unsigned int>("maze.jpg");
 
     // getting dimentions.
     int w = (*image).width();
@@ -22,7 +22,7 @@ int main() {
     // initializing variables and array.
     int x = w + 2;
     int y = h + 2;
-    int sheet[x][y][4] = {0};
+    int sheet[x][y][4] = { 0 };
     int size = x * y;
 
     // reading and saving maze data from image.
@@ -30,7 +30,8 @@ int main() {
         for (int j = 1; j < y; j++) {
             if (img.atXY(j - 1, i - 1) > 120) {
                 sheet[i][j][0] = 1;
-            } else {
+            }
+            else {
                 sheet[i][j][0] = 0;
             }
         }
@@ -76,7 +77,8 @@ int main() {
             if (sheet[i][j][0] == 3) {
                 sheet[i][j][1] = 1;
                 sheet[i][j][3] = 1;
-            } else {
+            }
+            else {
                 sheet[i][j][1] = 0;
             }
             if (sheet[i][j][0] == 5) {
@@ -96,7 +98,8 @@ int main() {
                 if (sheet[currenty][currentx][0] == 5) {
                     complete = 0;
                     break;
-                } else if (sheet[i][j][1] == current_num) {
+                }
+                else if (sheet[i][j][1] == current_num) {
                     if ((sheet[i + 1][j][0] == 1 || sheet[i + 1][j][0] == 5) &&
                         sheet[i + 1][j][2] == 0) {
                         sheet[i + 1][j][1] = current_num + 1;
@@ -183,7 +186,8 @@ int main() {
             back[count][1] = currenty;
             count++;
             cout << "down ";
-        } else if (sheet[currenty - 1][currentx][1] == run - 1) {
+        }
+        else if (sheet[currenty - 1][currentx][1] == run - 1) {
             currenty = currenty - 1;
             currentx = currentx;
             sheet[currenty][currentx][3]++;
@@ -192,7 +196,8 @@ int main() {
             back[count][1] = currenty;
             count++;
             cout << "up ";
-        } else if (sheet[currenty][currentx + 1][1] == run - 1) {
+        }
+        else if (sheet[currenty][currentx + 1][1] == run - 1) {
             currenty = currenty;
             currentx = currentx + 1;
             sheet[currenty][currentx][3]++;
@@ -201,7 +206,8 @@ int main() {
             back[count][1] = currenty;
             count++;
             cout << "right ";
-        } else if (sheet[currenty][currentx - 1][1] == run - 1) {
+        }
+        else if (sheet[currenty][currentx - 1][1] == run - 1) {
             currenty = currenty;
             currentx = currentx - 1;
             sheet[currenty][currentx][3]++;
@@ -228,7 +234,8 @@ int main() {
                     }
                 }
                 cout << "  ";
-            } else {
+            }
+            else {
                 for (int p = 0; p < 9; p++) {
                     for (int q = 0; q < 9; q++) {
                         vis(10 * j + p, 10 * i + q, 0, 0) = 100;
@@ -254,7 +261,8 @@ int main() {
                         maze(10 * j + p, 10 * i + q, 0, 2) = 0;
                     }
                 }
-            } else {
+            }
+            else {
                 for (int p = 0; p < 9; p++) {
                     for (int q = 0; q < 9; q++) {
                         maze(10 * j + p, 10 * i + q, 0, 0) = 255;
