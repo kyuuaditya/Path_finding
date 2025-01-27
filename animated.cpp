@@ -52,11 +52,13 @@ int main() {
                 imageData[x + 1][y + 1][0] = 2; // start point
                 imageData[x + 1][y + 1][1] = 1;
                 imageData[x + 1][y + 1][2] = 0;
+                imageData[x + 1][y + 1][3] = 1;
             }
             else if (pixel.r == 0 && pixel.g == 255 && pixel.b == 0) {
                 imageData[x + 1][y + 1][0] = 3; // end point
                 location_x = x + 1;
                 location_y = y + 1;
+                imageData[x + 1][y + 1][3] = 1;
 
             }
         }
@@ -121,19 +123,33 @@ int main() {
     while (back_count > 0) {
         if (imageData[back_x + 1][back_y][2] == back_count - 1) {
             back_x = back_x + 1;
+            imageData[back_x + 1][back_y][3] = 1;
         }
         else if (imageData[back_x - 1][back_y][2] == back_count - 1) {
             back_x = back_x - 1;
+            imageData[back_x - 1][back_y][3] = 1;
         }
         else if (imageData[back_x][back_y + 1][2] == back_count - 1) {
             back_y = back_y + 1;
+            imageData[back_x][back_y + 1][3] = 1;
         }
         else if (imageData[back_x][back_y - 1][2] == back_count - 1) {
             back_y = back_y - 1;
+            imageData[back_x][back_y - 1][3] = 1;
         }
         back_count--;
-        std::cout << back_x << " " << back_y << std::endl;
+        std::cout << back_x - 1 << " " << back_y - 1 << std::endl;
     }
+
+    int window_size = 1000;
+
+    int cell_size = window_size / size.x;
+
+    sf::ContextSettings settings;
+    settings.antialiasingLevel = 8;
+    sf::RenderWindow window(sf::VideoMode(window_size, window_size), "Main menu", sf::Style::Default, settings);
+    window.setFramerateLimit(144); // set frame rate limit
+    window.setVerticalSyncEnabled(true); // enable vertical sync
 
 
     // Main loop
@@ -143,6 +159,7 @@ int main() {
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+
 
         window.clear();
         // Draw your stuff here
