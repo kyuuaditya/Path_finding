@@ -90,6 +90,7 @@ int main() {
     int window_size = 800;
     int cell_size = window_size / size.x;
     int edgeOfRect = 1;
+    int pressed = 0;
 
     // display window setup
     sf::ContextSettings settings;
@@ -103,11 +104,16 @@ int main() {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
+            if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Space) {
+                    pressed = 1;
+                }
+            }
         }
 
         window.clear();
 
-        if (searching == 1) { // for path finding
+        if (searching == 1 && pressed) { // for path finding
             for (unsigned int num_y = 1;num_y < size.y + 1; num_y++) {
                 for (unsigned int num_x = 1; num_x < size.x + 1; num_x++) {
                     if (imageData[end_point_x][end_point_y][2] == step_count) { // check if end point is reached
@@ -138,13 +144,13 @@ int main() {
 
         sf::sleep(sf::milliseconds(100 * 20 / size.x)); // sleep for 100ms for 20x20 maze, 20ms for 100x100 maze, 10ms for 200x200 maze
 
-        if (searching == 0 && once == 1) { // to be followed only once after searching finishes
+        if (searching == 0 && once == 1 && pressed) { // to be followed only once after searching finishes
             back_count = imageData[end_point_x][end_point_y][2];
             temp_max = back_count;
             once = 0;
         }
 
-        if (back_count > 0 && searching == 0) { // main backtracking step
+        if (back_count > 0 && searching == 0 && pressed) { // main backtracking step
             if (imageData[back_x - 1][back_y][2] == back_count - 1) { // left
                 back_x = back_x - 1;
             }
@@ -182,7 +188,7 @@ int main() {
 
                 if (imageData[x + 1][y + 1][2] >= 0) { // area visited
                     sf::RectangleShape rectangle(sf::Vector2f(cell_size - edgeOfRect, cell_size - edgeOfRect));
-                    rectangle.setFillColor(sf::Color((int)(200 * gradient / 2 + 200 * 1 / 2), (int)(190 * gradient / 2 + 190 * 1 / 2), (int)(200 * gradient / 2 + 200 * 1 / 2)));
+                    rectangle.setFillColor(sf::Color((int)(200), (int)(225), (int)(200)));
                     rectangle.setPosition(x * cell_size + edgeOfRect, y * cell_size + edgeOfRect);
                     window.draw(rectangle);
                 }
